@@ -1,0 +1,38 @@
+---
+title: "Workout summary"
+author: "Patrick Ayers"
+date: "4/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+knitr::opts_chunk$set(echo = TRUE)
+workout_data <- read_csv("C:/Users/Patrick/Desktop/agg_sheet.csv")
+workout_data$Date <- mdy(workout_data$Date)
+workout_data <- drop_na(workout_data)
+
+```
+
+```{r echo = FALSE}
+ggplot(workout_data, aes(x = Date, y = `Cal burned`, col = `Workout Type`)) + geom_point() + ggtitle("Calories Burned Over Time", subtitle = "From March 28 to April 18 2020" ) +
+  ylab("Calories Burned")
+```
+
+
+## Summary Statistics
+```{r pressure, echo=FALSE}
+table_data <- workout_data %>% 
+              group_by(`Workout Type`) %>%
+              summarise(`Number of workouts` = n(),
+                        `Mean cals burned` = round(mean(`Cal burned`),0),
+                        `Mean heart rate` = round(mean(`avg heart rate`),0),
+                        `Mean Total Steps` = round(mean(`Total Steps`),0),
+                        `Mean Total Distance` = round(mean(`Total Distance`),2)) %>%
+              arrange(desc(`Mean cals burned`))
+table_data %>% kable(align = "c") %>% kable_styling(fixed_thead = T) %>%
+  footnote(general = "Total steps and total distance refers to the total steps and total distance for a given day.")
+```
+
