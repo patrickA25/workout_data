@@ -1,0 +1,63 @@
+---
+title: "Workout Summary  \n3/28/2020 to 4/22/2020"
+author: "Patrick Ayers"
+output:
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+workout_data <- read_csv("C:/Users/Patrick/Desktop/agg_sheet.csv")
+workout_data$Date <- mdy(workout_data$Date)
+workout_data <- drop_na(workout_data)
+```
+
+## Information about Workouts
+```{r echo=FALSE}
+table_data <- workout_data %>% 
+  group_by(Workout_Type) %>%
+  summarise(`Number of workouts` = n(),
+            `Mean Calories Burned` = round(mean(Cal_burned),0),
+            `Mean Heart Rate` = round(mean(avg_heart_rate),0),
+            `Mean Total Steps` = round(mean(Total_Steps),0),
+            `Mean Total Distance` = round(mean(Total_Distance),2)) %>%
+  arrange(desc(`Mean Calories Burned`))
+
+table_data %>% select(Workout_Type,`Number of workouts`,`Mean Calories Burned`,`Mean Heart Rate`) %>%
+            kable(align = "c") %>%  kable_styling(fixed_thead = T)
+```
+
+## Information about Workout Movement
+```{r  echo=FALSE}
+table_data %>% select(Workout_Type,`Mean Total Steps`,`Mean Total Distance`) %>%
+            kable(align = "c") %>%  kable_styling(fixed_thead = T)
+#table_data %>% kable(align = "c",booktabs  = FALSE) %>% kable_styling(fixed_thead = T) %>%
+  #(general = "Total steps and total distance refers to the total steps and total distance for a given day.")
+```
+
+## Information about Calories burned
+```{r,echo=FALSE}
+table_data_2 <- workout_data %>% 
+                summarise(`Mean Calories burned` = mean(Cal_burned),
+                          `Mean Active Calories burned` = mean(Total_Cals_for_the_Day),
+                          `Mean Total Calories burned in the day` = mean(`Total_Cals_burned_in_day`))
+table_data_2 %>% kable(align = "c", booktabs  = FALSE) %>% kable_styling(fixed_thead = T)
+
+```
+
+## Graph of Calories Burned Durning each Workout
+```{r fig.align = "center" ,fig.width = 5, fig.asp = 0.60, echo= FALSE}
+ggplot(workout_data, aes(x = Date, y = Cal_burned , col = Workout_Type)) + geom_point() + ggtitle("Calories Burned Over Time", subtitle = "From March 28 to April 22 2020" ) +
+  ylab("Calories Burned")
+```
+
+## Graph of Time Spent for Each Workout
+```{r  fig3,fig.align="center", fig.width = 5, fig.asp = 0.60, echo= FALSE}
+ggplot(workout_data,aes(x= Date, y = Time)) + 
+      geom_point() + 
+      geom_line(colour="#000099") + 
+      ggtitle("Time Spent Working out Over Time", subtitle = "From March 28 to April 22 2020") + ylab("Time Spend Workingout") 
+```
