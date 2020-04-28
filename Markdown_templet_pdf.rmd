@@ -1,5 +1,5 @@
 ---
-title: "Walking Workout Summary  \n3-28-2020 to `r Sys.Date()`"
+title: "Walking Workout Summary  \n3/28/2020 to `r format(Sys.Date(),'%m/%d/%Y')` "
 author: "Patrick Ayers"
 always_allow_html: yes
 output: pdf_document
@@ -19,10 +19,15 @@ workout_data <- drop_na(workout_data)
 min_day <- min(workout_data$Date)
 ```
 ## Over View of Project
-I have started to make sure I am walking for at least 30 minutes a day, and I have been doing this since March 28th.  This project has two main goals. First is to have accountability for making sure I am taking a 30-minute walk every day. The second is to create a report that can be quickly updated daily with minimal effort. I have created a report that can be updated in a and reposted in just a few moments. I will continue to update this report, along with possibly making updates to this document over the coming weeks.  
+I have started to make sure I am walking for at least 30 minutes a day, and I have been doing this since March 28th. 
+This project has two main goals. First is to have accountability for making sure I am taking a 30-minute walk every day.
+The second is to create a report that can be quickly updated daily with minimal effort. I have created a report that
+can be updated in a and reposted in just a few moments. I will continue to update this report, along with possibly 
+making updates to this document over the coming weeks.  
 
 ## Top Line Summary of Information
-Here is the summary of yesterday's workout along with average information about the last `r Sys.Date() - min(workout_data$Date)` days of workouts.
+Here is the summary of yesterday's workout along with average information about the last `r Sys.Date() - min(workout_data$Date)`
+days of workouts.
 
 ### Yesterdays Workout
 ```{r, echo= FALSE}
@@ -51,7 +56,10 @@ kable(table_1) %>%
 ```
 
 ### Averages for Last `r Sys.Date() - min(workout_data$Date)` Day Information
-There are two columns about calories in this table. Average Active Calories is the average of the total active calories my apple watch has at the end of the day. The second column Average Total Calories is the total number of calories my body burned; this number contains the sum of my Basal Metabolic Rate (BMR) and the active calories my body has burned.
+There are two columns about calories in this table. Average Active Calories is the average of the total
+active calories my Apple watch has at the end of the day. The second column Average Total Calories is the
+total number of calories my body burned; this number contains the sum of my Basal Metabolic Rate (BMR) 
+and the active calories my body has burned.
 ```{r, echo= FALSE}
 
 table_2 <- workout_data %>%
@@ -67,41 +75,46 @@ kable(table_2) %>%
 
 
 ## General Information Over Time  
-```{r  , echo= FALSE,out.width = "90%"}
+```{r  , echo= FALSE,out.width = "50%"}
  ggplot(workout_data, aes(x = Date, y = Cal_burned )) +
           geom_point() + geom_line()+
-          ggtitle("Calories Burned Over Time", subtitle = "From March 28 to April 22 2020" ) +
+          ggtitle("Calories Burned Over Time", 
+                  subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ") ) +
           ylab("Calories Burned")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "90%"}
+```{r  , echo= FALSE,out.width = "50%"}
  ggplot(workout_data, aes(x = Date, y = avg_heart_rate)) + 
           geom_point() + 
           geom_line() + 
-          ggtitle("Average Heart Rate Durning Workout", subtitle = "From March 28 to April 22 2020") + 
+          ggtitle("Average Heart Rate Durning Workout", 
+                  subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ")) + 
           xlab("Date") + ylab("Average Heart Rate")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "90%"}
+```{r  , echo= FALSE,out.width = "50%"}
 ggplot(workout_data,aes(x= Date, y = Time)) + 
           geom_point() + 
           geom_line() + 
-          ggtitle("Time Spent Working out Over Time", subtitle = "From March 28 to April 22 2020") + 
+          ggtitle("Time Spent Working out Over Time", 
+                  subtitle = paste("From March 28 to",format(Sys.Date(),"%b %d %Y"),sep = " ")) + 
           ylab("Time Spend Workingout") +
           xlab("Date")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "90%"}
+```{r  , echo= FALSE,out.width = "50%"}
  ggplot(workout_data,aes(x= Date, y = Total_Cals_for_the_Day)) + 
           geom_point() + 
           geom_line() + 
-          ggtitle("Number of Activity Calories Burned", subtitle = "From March 28 to April 22 2020") + 
+          ggtitle("Number of Activity Calories Burned",
+                  subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ")) + 
           xlab("Date") + 
           ylab("Number of Activity Calories Burned")+ theme_gray()
 
 ```
-```{r  , echo= FALSE,out.width = "90%"}
+```{r  , echo= FALSE,out.width = "50%"}
  ggplot(workout_data,aes(x= Date, y = Total_Cals_burned_in_day)) + 
           geom_point() + 
           geom_line() + 
-          ggtitle("Number of Calories Burned Over Time", subtitle = "From March 28 to April 22 2020") + 
+          ggtitle("Number of Calories Burned Over Time",
+                  subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ")) + 
           xlab("Date") + 
         ylab("Number of Calories Burned in a Day") + theme_gray()
 
