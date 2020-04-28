@@ -1,61 +1,110 @@
 ---
-title: "Workout Summary  \n3/28/2020 to 4/22/2020"
+title: "Walking Workout Summary  \n3-28-2020 to `r Sys.Date()`"
 author: "Patrick Ayers"
+always_allow_html: yes
 output: pdf_document
+
 ---
 
 ```{r setup, include=FALSE}
+library("webshot")
+webshot::install_phantomjs()
 library(tidyverse)
 library(lubridate)
 library(kableExtra)
-workout_data <- read_csv("C:/Users/Patrick/Desktop/agg_sheet.csv")
+library(gridExtra)
+workout_data <- read_csv("workout data.txt")
 workout_data$Date <- mdy(workout_data$Date)
 workout_data <- drop_na(workout_data)
+min_day <- min(workout_data$Date)
 ```
+## Over View of Project
+I have started to make sure I am walking for at least 30 minutes a day, and I have been doing this since March 28th.  This project has two main goals. First is to have accountability for making sure I am taking a 30-minute walk every day. The second is to create a report that can be quickly updated daily with minimal effort. I have created a report that can be updated in a and reposted in just a few moments. I will continue to update this report, along with possibly making updates to this document over the coming weeks.  
 
-## Information about Workouts
-```{r echo=FALSE}
-table_data <- workout_data %>% 
-  group_by(Workout_Type) %>%
-  summarise(`Number of workouts` = n(),
-            `Mean Calories Burned` = round(mean(Cal_burned),0),
-            `Mean Heart Rate` = round(mean(avg_heart_rate),0),
-            `Mean Total Steps` = round(mean(Total_Steps),0),
-            `Mean Total Distance` = round(mean(Total_Distance),2)) %>%
-  arrange(desc(`Mean Calories Burned`))
+## Top Line Summary of Information
+Here is the summary of yesterday's workout along with average information about the last `r Sys.Date() - min(workout_data$Date)` days of workouts.
 
-table_data %>% select(Workout_Type,`Number of workouts`,`Mean Calories Burned`,`Mean Heart Rate`) %>%
-            kable(align = "c") %>%  kable_styling(fixed_thead = T)
-```
+### Yesterdays Workout
+```{r, echo= FALSE}
 
-## Information about Workout Movement
-```{r  echo=FALSE}
-table_data %>% select(Workout_Type,`Mean Total Steps`,`Mean Total Distance`) %>%
-            kable(align = "c") %>%  kable_styling(fixed_thead = T)
-#table_data %>% kable(align = "c",booktabs  = FALSE) %>% kable_styling(fixed_thead = T) %>%
-  #(general = "Total steps and total distance refers to the total steps and total distance for a given day.")
-```
+table_3 <- workout_data %>% filter(Date == max(Date)) %>% 
+           select(Date,Workout_Type,Time,avg_heart_rate,Distance) %>%
+          rename( `Average Hear Rate`= avg_heart_rate,
+                  `Workout Type`= Workout_Type)
 
-## Information about Calories burned
-```{r,echo=FALSE}
-table_data_2 <- workout_data %>% 
-                summarise(`Mean Calories burned` = mean(Cal_burned),
-                          `Mean Active Calories burned` = mean(Total_Cals_for_the_Day),
-                          `Mean Total Calories burned in the day` = mean(`Total_Cals_burned_in_day`))
-table_data_2 %>% kable(align = "c", booktabs  = FALSE) %>% kable_styling(fixed_thead = T)
+kable(table_3) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
-## Graph of Calories Burned Durning each Workout
-```{r fig.align = "center" ,fig.width = 5, fig.asp = 0.60, echo= FALSE}
-ggplot(workout_data, aes(x = Date, y = Cal_burned , col = Workout_Type)) + geom_point() + ggtitle("Calories Burned Over Time", subtitle = "From March 28 to April 22 2020" ) +
-  ylab("Calories Burned")
+### Averages for Last `r Sys.Date() - min(workout_data$Date)` Workouts
+```{r, echo= FALSE}
+table_1 <- workout_data %>% 
+          summarise('Average Workout Time' = mean(Time),
+                    'Average Calories Burned' = mean(Cal_burned),
+                    'Average Heart Rate' = mean(avg_heart_rate),
+                    'Average Distance' = mean(Distance))
+
+kable(table_1) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
 ```
 
-## Graph of Time Spent for Each Workout
-```{r  fig3,fig.align="center", fig.width = 5, fig.asp = 0.60, echo= FALSE}
+### Averages for Last `r Sys.Date() - min(workout_data$Date)` Day Information
+There are two columns about calories in this table. Average Active Calories is the average of the total active calories my apple watch has at the end of the day. The second column Average Total Calories is the total number of calories my body burned; this number contains the sum of my Basal Metabolic Rate (BMR) and the active calories my body has burned.
+```{r, echo= FALSE}
+
+table_2 <- workout_data %>%
+          summarise('Average Active Calories' = mean(Total_Cals_for_the_Day),
+                    'Average Total Calories' = mean(Total_Cals_burned_in_day),
+                    'Average Steps taken' = mean(Total_Steps),
+                    'Average Distance Walked'= mean(Total_Distance))
+
+kable(table_2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```
+
+
+## General Information Over Time  
+```{r  , echo= FALSE,out.width = "90%"}
+ ggplot(workout_data, aes(x = Date, y = Cal_burned )) +
+          geom_point() + geom_line()+
+          ggtitle("Calories Burned Over Time", subtitle = "From March 28 to April 22 2020" ) +
+          ylab("Calories Burned")+ theme_gray()
+```
+```{r  , echo= FALSE,out.width = "90%"}
+ ggplot(workout_data, aes(x = Date, y = avg_heart_rate)) + 
+          geom_point() + 
+          geom_line() + 
+          ggtitle("Average Heart Rate Durning Workout", subtitle = "From March 28 to April 22 2020") + 
+          xlab("Date") + ylab("Average Heart Rate")+ theme_gray()
+```
+```{r  , echo= FALSE,out.width = "90%"}
 ggplot(workout_data,aes(x= Date, y = Time)) + 
-      geom_point() + 
-      geom_line(colour="#000099") + 
-      ggtitle("Time Spent Working out Over Time", subtitle = "From March 28 to April 22 2020") + ylab("Time Spend Workingout") 
+          geom_point() + 
+          geom_line() + 
+          ggtitle("Time Spent Working out Over Time", subtitle = "From March 28 to April 22 2020") + 
+          ylab("Time Spend Workingout") +
+          xlab("Date")+ theme_gray()
 ```
+```{r  , echo= FALSE,out.width = "90%"}
+ ggplot(workout_data,aes(x= Date, y = Total_Cals_for_the_Day)) + 
+          geom_point() + 
+          geom_line() + 
+          ggtitle("Number of Activity Calories Burned", subtitle = "From March 28 to April 22 2020") + 
+          xlab("Date") + 
+          ylab("Number of Activity Calories Burned")+ theme_gray()
+
+```
+```{r  , echo= FALSE,out.width = "90%"}
+ ggplot(workout_data,aes(x= Date, y = Total_Cals_burned_in_day)) + 
+          geom_point() + 
+          geom_line() + 
+          ggtitle("Number of Calories Burned Over Time", subtitle = "From March 28 to April 22 2020") + 
+          xlab("Date") + 
+        ylab("Number of Calories Burned in a Day") + theme_gray()
+
+
+```
+
