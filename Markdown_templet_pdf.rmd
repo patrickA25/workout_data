@@ -1,9 +1,10 @@
 ---
-title: "Workout Summary  \n3/28/2020 to `r format(Sys.Date(),'%m/%d/%Y')` "
-author: "Patrick Ayers"
-output: github_document
-
+title: "<center> Workout Summary  \n3/28/2020 to `r format(Sys.Date(),'%m/%d/%Y')`"
+author: "Patrick Ayers </center>"
+output:  github_document
 ---
+
+
 
 ```{r setup, include=FALSE}
 library("webshot")
