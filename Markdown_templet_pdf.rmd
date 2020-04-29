@@ -1,8 +1,7 @@
 ---
-title: "Walking Workout Summary  \n3/28/2020 to `r format(Sys.Date(),'%m/%d/%Y')` "
+title: "Workout Summary  \n3/28/2020 to `r format(Sys.Date(),'%m/%d/%Y')` "
 author: "Patrick Ayers"
-always_allow_html: yes
-output: pdf_document
+output: github_document
 
 ---
 
@@ -37,21 +36,21 @@ table_3 <- workout_data %>% filter(Date == max(Date)) %>%
           rename( `Average Hear Rate`= avg_heart_rate,
                   `Workout Type`= Workout_Type)
 
-kable(table_3) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(table_3,format = "html" )# %>%
+  #kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
 ### Averages for Last `r Sys.Date() - min(workout_data$Date)` Workouts
 ```{r, echo= FALSE}
 table_1 <- workout_data %>% 
-          summarise('Average Workout Time' = mean(Time),
+          summarise('Average Workout Time' = round(mean(Time),2),
                     'Average Calories Burned' = mean(Cal_burned),
-                    'Average Heart Rate' = mean(avg_heart_rate),
-                    'Average Distance' = mean(Distance))
+                    'Average Heart Rate' = round(mean(avg_heart_rate),2),
+                    'Average Distance' = round(mean(Distance),2))
 
-kable(table_1) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(table_1,format = "html")# %>%
+ # kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
@@ -63,26 +62,26 @@ and the active calories my body has burned.
 ```{r, echo= FALSE}
 
 table_2 <- workout_data %>%
-          summarise('Average Active Calories' = mean(Total_Cals_for_the_Day),
-                    'Average Total Calories' = mean(Total_Cals_burned_in_day),
-                    'Average Steps taken' = mean(Total_Steps),
-                    'Average Distance Walked'= mean(Total_Distance))
+          summarise('Average Active Calories' = round(mean(Total_Cals_for_the_Day),2),
+                    'Average Total Calories' = round(mean(Total_Cals_burned_in_day),2),
+                    'Average Steps taken' = round(mean(Total_Steps),2),
+                    'Average Distance Walked'= round(mean(Total_Distance),2))
 
-kable(table_2) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(table_2,format = "html") #%>%
+  #kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
 
 ## General Information Over Time  
-```{r  , echo= FALSE,out.width = "50%"}
+```{r  , echo= FALSE,out.width = "70%"}
  ggplot(workout_data, aes(x = Date, y = Cal_burned )) +
           geom_point() + geom_line()+
           ggtitle("Calories Burned Over Time", 
                   subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ") ) +
           ylab("Calories Burned")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "50%"}
+```{r  , echo= FALSE,out.width = "70%"}
  ggplot(workout_data, aes(x = Date, y = avg_heart_rate)) + 
           geom_point() + 
           geom_line() + 
@@ -90,7 +89,7 @@ kable(table_2) %>%
                   subtitle = paste("From March 28 to",format((Sys.Date()-1),"%b %d %Y"),sep = " ")) + 
           xlab("Date") + ylab("Average Heart Rate")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "50%"}
+```{r  , echo= FALSE,out.width = "70%"}
 ggplot(workout_data,aes(x= Date, y = Time)) + 
           geom_point() + 
           geom_line() + 
@@ -99,7 +98,7 @@ ggplot(workout_data,aes(x= Date, y = Time)) +
           ylab("Time Spend Workingout") +
           xlab("Date")+ theme_gray()
 ```
-```{r  , echo= FALSE,out.width = "50%"}
+```{r  , echo= FALSE,out.width = "70%"}
  ggplot(workout_data,aes(x= Date, y = Total_Cals_for_the_Day)) + 
           geom_point() + 
           geom_line() + 
@@ -109,7 +108,7 @@ ggplot(workout_data,aes(x= Date, y = Time)) +
           ylab("Number of Activity Calories Burned")+ theme_gray()
 
 ```
-```{r  , echo= FALSE,out.width = "50%"}
+```{r  , echo= FALSE,out.width = "70%"}
  ggplot(workout_data,aes(x= Date, y = Total_Cals_burned_in_day)) + 
           geom_point() + 
           geom_line() + 
