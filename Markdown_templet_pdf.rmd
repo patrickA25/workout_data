@@ -33,9 +33,10 @@ days of workouts.
 ```{r, echo= FALSE}
 
 table_3 <- workout_data %>% filter(Date == max(Date)) %>% 
-           select(Date,Workout_Type,Time,avg_heart_rate,Distance) %>%
+           select(Date,Workout_Type,Time,avg_heart_rate,Cal_burned,Distance) %>%
           rename( `Average Hear Rate`= avg_heart_rate,
-                  `Workout Type`= Workout_Type)
+                  `Workout Type`= Workout_Type,
+                  `Calories Burned` = Cal_burned)
 
 kable(table_3,format = "html" )# %>%
   #kable_styling(bootstrap_options = c("striped", "hover"))
