@@ -122,3 +122,17 @@ ggplot(workout_data,aes(x= Date, y = Time)) +
 
 ```
 
+
+
+## Workout Data Table
+```{r,echo= FALSE}
+WO_data_table <- workout_data %>% 
+                 select(Date,Time,Cal_burned,avg_heart_rate,Distance,Total_Cals_for_the_Day)%>%
+                 rename(`Calories Burned` = Cal_burned,
+                        `Total Activity Calories`= Total_Cals_for_the_Day,
+                        `Average Hear Rate`= avg_heart_rate)  
+kable(WO_data_table,format = "html")
+
+```
+
+
