@@ -1,8 +1,0 @@
-rmarkdown::render("Markdown_templet_pdf.RMD", "html_document",
-                  output_file = paste0("report_",Sys.Date()))
-
-
-library(knitr)
-library(markdown)
-knit("Markdown_templet_pdf.RMD") 
-markdownToHTML("Markdown_templet_pdf.md","myMarkdownDoc.html", fragment.only=TRUE)
