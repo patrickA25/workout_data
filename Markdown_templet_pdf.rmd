@@ -15,6 +15,7 @@ library(kableExtra)
 library(gridExtra)
 workout_data <- read_csv("workout data.txt")
 workout_data$Date <- mdy(workout_data$Date)
+workout_data$Month <- month(workout_data$Date,label = TRUE, abbr = FALSE)
 workout_data <- drop_na(workout_data)
 min_day <- min(workout_data$Date)
 ```
@@ -74,6 +75,19 @@ kable(table_2,format = "html") #%>%
 
 ```
 
+## Summary of Workout Over Each Month
+
+```{r,echo=FALSE}
+month_table_data <- workout_data %>% 
+                    filter(Month != 'March') %>%
+                    group_by(Month) %>%
+                    summarise('Total Steps Take' = sum(Total_Steps),
+                              'Total Workout Distance' = sum(Distance),
+                              'Total Time Working out in hours' = round((sum(Time)/60),2),
+                              'Total Active Calories' = sum(Total_Cals_for_the_Day ))
+  
+kable(month_table_data,format = "html")                   
+```
 
 ## General Information Over Time  
 ```{r  , echo= FALSE,out.width = "70%"}
