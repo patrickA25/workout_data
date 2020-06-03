@@ -64,4 +64,5 @@ Date ,Workout_Type,Time,Cal_burned,avg_heart_rate,Distance,Total_Steps,Total_Dis
 5/29/2020,Walk/Strength_Training,38,432,139,2.12,9123,4.3,1192,4099
 5/30/2020,Walk,63,469,117,2.87,18516,8.4,1644,4605
 5/31/2020,Walk,28,245,124,1.41,7040,3.2,886,3620
-6/1/2020,Walk/Strength_Training,54,584,134,2.50,18247,8.4,1823,4900
+6/1/2020,Walk/Strength_Training,54,584,134,2.50,18247,8.4,1823,4741
+6/2/2020,Walk,36,379,130,2.12,7547,3.6,924,3500
